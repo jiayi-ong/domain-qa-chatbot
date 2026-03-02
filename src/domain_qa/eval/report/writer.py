@@ -1,0 +1,76 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Optional
+
+from domain_qa.eval.config import EvalReport
+
+
+def render_text_report(report: EvalReport) -> str:
+    lines: list[str] = []
+    lines.append("LLM Chatbot Evaluation Report")
+    lines.append("=" * 32)
+    lines.append("")
+    lines.append("Config")
+    lines.append("-" * 6)
+    for k, v in report.config.items():
+        lines.append(f"{k}: {v}")
+    lines.append("")
+    lines.append("Summary")
+    lines.append("-" * 7)
+    s = report.summary
+    lines.append(f"Total: {s.total}")
+    lines.append(f"Passed: {s.passed}")
+    lines.append(f"Pass rate: {s.pass_rate:.1%}")
+    lines.append("")
+    lines.append("Pass rate by category")
+    lines.append("-" * 21)
+    for cat, d in s.by_category.items():
+        lines.append(f"- {cat}: {int(d['passed'])}/{int(d['total'])} ({d['pass_rate']:.1%})")
+    lines.append("")
+    lines.append("Failures")
+    lines.append("-" * 8)
+    failures = [r for r in report.results if not r.passed]
+    if not failures:
+        lines.append("None 🎉")
+        return "\n".join(lines)
+
+    for r in failures:
+        lines.append(f"[{r.category}] {r.id}")
+        lines.append(f"Query: {r.query}")
+        if r.expect_refusal:
+            lines.append("Expected: REFUSAL")
+        else:
+            lines.append(f"Expected: {r.expected_answer}")
+        lines.append(f"Got: {r.model_answer}")
+        lines.append("Reasons:")
+        for reason in r.failure_reasons:
+            lines.append(f"  - {reason}")
+        lines.append("Deterministic:")
+        lines.append(
+            f"  jaccard={r.deterministic.jaccard:.3f} "
+            f"rouge1_f1={r.deterministic.rouge1_f1:.3f} "
+            f"rouge2_f1={r.deterministic.rouge2_f1:.3f} "
+            f"refusal_detected={r.deterministic.refusal_detected}"
+        )
+        if r.golden_judge is not None:
+            lines.append(f"Golden judge: score={r.golden_judge.score} rationale={r.golden_judge.rationale}")
+        if r.rubric_judge is not None:
+            lines.append(f"Rubric judge: overall={r.rubric_judge.overall_score} summary={r.rubric_judge.summary}")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def write_reports(
+    report: EvalReport,
+    *,
+    text_path: Path,
+    json_path: Optional[Path] = None,
+) -> None:
+    text_path.parent.mkdir(parents=True, exist_ok=True)
+    text_path.write_text(render_text_report(report), encoding="utf-8")
+
+    if json_path is not None:
+        json_path.parent.mkdir(parents=True, exist_ok=True)
+        json_path.write_text(report.model_dump_json(indent=2), encoding="utf-8")

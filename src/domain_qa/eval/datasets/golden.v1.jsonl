@@ -1,0 +1,1 @@
+{"id": "in_001", "category": "in_domain", "query": "What is X?", "expected_answer": "X is ...", "expect_refusal": false}
