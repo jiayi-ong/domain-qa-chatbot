@@ -1,0 +1,8 @@
+{"role": "user", "content": "What is Google Cloud Run?"}
+{"role": "assistant", "content": "Google Cloud Run is a fully managed serverless platform that runs containerized applications. You deploy a container image, and Cloud Run automatically handles scaling, networking, and infrastructure management."}
+
+{"role": "user", "content": "How do I deploy a FastAPI app to Cloud Run?"}
+{"role": "assistant", "content": "First, containerize your FastAPI app with a Dockerfile that runs uvicorn. Then build and push the image to Google Artifact Registry. Finally, deploy it using 'gcloud run deploy' and specify the image and region."}
+
+{"role": "user", "content": "What environment variable does Cloud Run use for the port?"}
+{"role": "assistant", "content": "Cloud Run sets the PORT environment variable automatically. Your application must bind to this port (e.g., 0.0.0.0:$PORT) to receive traffic."}
