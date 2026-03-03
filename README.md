@@ -33,3 +33,9 @@ uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" cmd /c "start /B python -m uvicor
 ```<PORT>```: E.g. ```8000```
 
 ```<REL_PATH_TO_REPORT_FILE>```: The relative path (relative to the current directory in Command Prompt) to export the text evaluation report (NOTE: has to end with .txt). E.g. ```reports\eval_report.txt```
+
+Alternatively, in bash:
+
+```bash
+uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" python "<FULL_PATH_TO_PROJECT_ROOT>\run_eval.py"
+```
