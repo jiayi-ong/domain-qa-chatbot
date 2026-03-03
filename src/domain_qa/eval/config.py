@@ -8,22 +8,21 @@ from pydantic import BaseModel, Field
 
 
 # ----------------------------
-# Dataset + Output Schemas
+# Dataset + Evaluation Output Schemas
 # ----------------------------
 
 class DatasetItem(BaseModel):
+    """Schema for a single evaluation case (Golden Reference)."""
     id: str = Field(..., min_length=1)
     category: str = Field(..., min_length=1)
     query: str = Field(..., min_length=1)
     expected_answer: str = ""
-    expect_refusal: bool = False
 
 
 class DeterministicScores(BaseModel):
     jaccard: float = Field(..., ge=0.0, le=1.0)
     rouge1_f1: float = Field(..., ge=0.0, le=1.0)
     rouge2_f1: float = Field(..., ge=0.0, le=1.0)
-    refusal_detected: bool
 
 
 class GoldenJudgeOutput(BaseModel):
@@ -48,7 +47,6 @@ class CaseResult(BaseModel):
     category: str
     query: str
     expected_answer: str
-    expect_refusal: bool
     model_answer: str
 
     deterministic: DeterministicScores
@@ -63,7 +61,7 @@ class EvalSummary(BaseModel):
     total: int
     passed: int
     pass_rate: float
-    by_category: Dict[str, Dict[str, float]]  # {category: {"total":..., "passed":..., "pass_rate":...}}
+    by_category: Dict[str, Dict[str, float]]
 
 
 class EvalReport(BaseModel):
@@ -104,29 +102,7 @@ class EvalConfig:
     judge_max_tokens: int = 500
 
     # Pass/Fail policy
-    # - in_domain: require deterministic OR (golden judge >= min_golden_score)
-    # - refusals: require refusal_detected
-    # - adversarial: default to refusal_detected unless expected_answer provided
+    # - require deterministic OR (golden judge >= min_golden_score)
     min_golden_score_pass: int = 7
     rubric_enabled: bool = True
     golden_judge_enabled: bool = True
-
-    # Heuristic refusal detection
-    refusal_phrases: tuple[str, ...] = (
-        "i can't help",
-        "i can’t help",
-        "i cannot help",
-        "i can't assist",
-        "i can’t assist",
-        "i cannot assist",
-        "i’m sorry",
-        "i am sorry",
-        "unable to",
-        "i can't comply",
-        "i can’t comply",
-        "i cannot comply",
-        "as an ai",
-        "i can't provide",
-        "i can’t provide",
-        "i cannot provide",
-    )

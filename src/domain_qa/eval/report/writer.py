@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional
+from datetime import datetime, timezone
 
 from domain_qa.eval.config import EvalReport
 
@@ -38,10 +39,7 @@ def render_text_report(report: EvalReport) -> str:
     for r in failures:
         lines.append(f"[{r.category}] {r.id}")
         lines.append(f"Query: {r.query}")
-        if r.expect_refusal:
-            lines.append("Expected: REFUSAL")
-        else:
-            lines.append(f"Expected: {r.expected_answer}")
+        lines.append(f"Expected: {r.expected_answer}")
         lines.append(f"Got: {r.model_answer}")
         lines.append("Reasons:")
         for reason in r.failure_reasons:
@@ -51,7 +49,6 @@ def render_text_report(report: EvalReport) -> str:
             f"  jaccard={r.deterministic.jaccard:.3f} "
             f"rouge1_f1={r.deterministic.rouge1_f1:.3f} "
             f"rouge2_f1={r.deterministic.rouge2_f1:.3f} "
-            f"refusal_detected={r.deterministic.refusal_detected}"
         )
         if r.golden_judge is not None:
             lines.append(f"Golden judge: score={r.golden_judge.score} rationale={r.golden_judge.rationale}")
@@ -62,12 +59,18 @@ def render_text_report(report: EvalReport) -> str:
     return "\n".join(lines)
 
 
+def with_timestamp(path: Path) -> Path:
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%S%M")
+    return path.with_name(f"{path.stem}_{timestamp}{path.suffix}")
+
+
 def write_reports(
     report: EvalReport,
     *,
     text_path: Path,
     json_path: Optional[Path] = None,
 ) -> None:
+    text_path = with_timestamp(text_path)
     text_path.parent.mkdir(parents=True, exist_ok=True)
     text_path.write_text(render_text_report(report), encoding="utf-8")
 

@@ -21,25 +21,32 @@ from domain_qa.eval.report.writer import write_reports
 
 
 def _read_jsonl(path: Path) -> List[DatasetItem]:
+    """Read a JSONL file from path and return a list of DatasetItem."""
     if not path.exists():
         return []
+    
     items: List[DatasetItem] = []
     for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         line = line.strip()
         if not line:
             continue
         try:
-            items.append(DatasetItem.model_validate(json.loads(line)))
+            validated_line = DatasetItem.model_validate(json.loads(line))
+            items.append(validated_line)
         except Exception as e:
             raise ValueError(f"Invalid JSONL at {path}:{i}: {e}") from e
     return items
 
 
 def load_all_datasets(cfg: EvalConfig) -> List[DatasetItem]:
+    """Load datasets for in-domain, expected refusals (out-of-scoep), 
+    and adversarial evaluation cases, returning the combined results
+    as a list of DatasetItem."""
     all_items: List[DatasetItem] = []
     all_items.extend(_read_jsonl(cfg.in_domain_path))
     all_items.extend(_read_jsonl(cfg.expected_refusals_path))
-    # all_items.extend(_read_jsonl(cfg.adversarial_path))
+    all_items.extend(_read_jsonl(cfg.adversarial_path))
+
     return all_items
 
 
@@ -47,13 +54,16 @@ def categorize_summary(results: List[CaseResult]) -> EvalSummary:
     total = len(results)
     passed = sum(1 for r in results if r.passed)
     by_cat: Dict[str, Dict[str, float]] = {}
+
     for r in results:
         d = by_cat.setdefault(r.category, {"total": 0.0, "passed": 0.0, "pass_rate": 0.0})
         d["total"] += 1.0
         if r.passed:
             d["passed"] += 1.0
+
     for cat, d in by_cat.items():
         d["pass_rate"] = (d["passed"] / d["total"]) if d["total"] else 0.0
+
     return EvalSummary(
         total=total,
         passed=passed,
@@ -70,25 +80,18 @@ def decide_pass_fail(
 ) -> Tuple[bool, List[str]]:
     reasons: List[str] = []
 
-    # Refusal-expected cases
-    if item.expect_refusal:
-        if not deterministic.refusal_detected:
-            reasons.append("Expected refusal, but refusal was not detected.")
-        return (len(reasons) == 0), reasons
-
     # Answer-expected cases:
     # Deterministic pass if any threshold met (kept simple)
     det_ok = (
         deterministic.jaccard >= cfg.min_jaccard_pass
         and deterministic.rouge1_f1 >= cfg.min_rouge1_f1_pass
         and deterministic.rouge2_f1 >= cfg.min_rouge2_f1_pass
-        and not deterministic.refusal_detected
     )
     if not det_ok:
         reasons.append(
             "Deterministic thresholds not met "
-            f"(jaccard>={cfg.min_jaccard_pass}, rouge1>={cfg.min_rouge1_f1_pass}, rouge2>={cfg.min_rouge2_f1_pass}) "
-            "and/or refusal detected."
+            f"(jaccard>={cfg.min_jaccard_pass}, "
+            "rouge1>={cfg.min_rouge1_f1_pass}, rouge2>={cfg.min_rouge2_f1_pass})"
         )
 
     # Golden judge pass
@@ -106,6 +109,7 @@ def decide_pass_fail(
 
 
 def main() -> int:
+    """Main function to run the evaluation."""
     p = argparse.ArgumentParser(description="Run golden-dataset evals against a FastAPI chatbot.")
     p.add_argument("--base-url", type=str, default=None, help="FastAPI base URL (e.g., http://127.0.0.1:8000)")
     p.add_argument("--chat-path", type=str, default=None, help="Chat endpoint path (default: /chat)")
@@ -149,12 +153,11 @@ def main() -> int:
 
         det = compute_deterministic(
             expected_answer=item.expected_answer,
-            model_answer=model_answer,
-            refusal_phrases=cfg.refusal_phrases,
+            model_answer=model_answer
         )
 
         golden_out = None
-        if cfg.golden_judge_enabled and not item.expect_refusal and item.expected_answer.strip():
+        if cfg.golden_judge_enabled and item.expected_answer.strip():
             golden_out = golden_judge.evaluate(
                 query=item.query,
                 expected_answer=item.expected_answer,
@@ -181,7 +184,6 @@ def main() -> int:
                 category=item.category,
                 query=item.query,
                 expected_answer=item.expected_answer,
-                expect_refusal=item.expect_refusal,
                 model_answer=model_answer,
                 deterministic=det,
                 golden_judge=golden_out,

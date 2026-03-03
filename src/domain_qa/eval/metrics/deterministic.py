@@ -50,17 +50,9 @@ def rouge_n_f1(ref_tokens: Sequence[str], hyp_tokens: Sequence[str], n: int) -> 
     return (2 * precision * recall) / (precision + recall)
 
 
-def refusal_detected(answer: str, refusal_phrases: Iterable[str]) -> bool:
-    a = (answer or "").strip().lower()
-    if not a:
-        return True  # empty answer counts as refusal/failure-safe
-    return any(p in a for p in refusal_phrases)
-
-
 def compute_deterministic(
     expected_answer: str,
-    model_answer: str,
-    refusal_phrases: Iterable[str],
+    model_answer: str
 ) -> DeterministicScores:
     ref_toks = tokenize(expected_answer)
     hyp_toks = tokenize(model_answer)
@@ -68,6 +60,5 @@ def compute_deterministic(
     return DeterministicScores(
         jaccard=jaccard(ref_toks, hyp_toks),
         rouge1_f1=rouge_n_f1(ref_toks, hyp_toks, 1),
-        rouge2_f1=rouge_n_f1(ref_toks, hyp_toks, 2),
-        refusal_detected=refusal_detected(model_answer, refusal_phrases),
+        rouge2_f1=rouge_n_f1(ref_toks, hyp_toks, 2)
     )
