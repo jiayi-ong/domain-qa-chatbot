@@ -5,15 +5,15 @@ This project implements a Q&A Chatbot that specializes in the metrics used in qu
 
 First, download the code repository. To run the model evaluation locally on Windows, run the following line of code in Command Prompt after replacing the placeholder values:
 ```
-uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" cmd /c "start /B python -m uvicorn domain_qa.app.main:app --reload && timeout /t <STARTUP_WAIT_SECONDS> >nul && python -m domain_qa.eval.run --base-url http://<HOST>:<PORT> --report-path <FULL_PATH_TO_REPORT_FILE>"
+uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" cmd /c "start /B python -m uvicorn domain_qa.app.main:app --reload && timeout /t <STARTUP_WAIT_SECONDS> >nul && python -m domain_qa.eval.run --base-url http://<HOST>:<PORT> --report-path <REL_PATH_TO_REPORT_FILE>"
 ```
 
-```<FULL_PATH_TO_PROJECT_ROOT>```: The absolute path to the project root.
+```<FULL_PATH_TO_PROJECT_ROOT>```: The absolute path to the project root folder. E.g. ```C:\Desktop\cloned_project```
 
-```<STARTUP_WAIT_SECONDS>```: The number of seconds (integer) to wait for app to start-up. Recommend 10 seconds. e.g. ```10```
+```<STARTUP_WAIT_SECONDS>```: The number of seconds (integer) to wait for app to start-up. E.g. ```10```
 
-```<HOST>```: e.g. ```127.0.0.1```
+```<HOST>```: E.g. ```127.0.0.1```
 
-```<PORT>```: e.g. ```8000```
+```<PORT>```: E.g. ```8000```
 
-```<FULL_PATH_TO_REPORT_FILE>```: The absolute path to export the text evaluation report (NOTE: has to end with .txt). e.g. ```C:\Desktop\cloned_repo\reports\eval_report.txt```
+```<REL_PATH_TO_REPORT_FILE>```: The relative path (relative to the current directory in Command Prompt) to export the text evaluation report (NOTE: has to end with .txt). E.g. ```reports\eval_report.txt```
