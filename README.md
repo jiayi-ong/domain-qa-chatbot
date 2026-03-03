@@ -1,6 +1,10 @@
 ## Project Overview
 This project implements a Q&A Chatbot that specializes in the metrics used in quantitative financial analysis. Using prompt and context engineering, the Chatbot is able to provide definitions of metrics such as the P/E ratio and EPS, and also explain their meanings, applications, limitations, and give examples. It is also instructed to handle out-of-scope and distressed user inputs.
 
+## Deployment
+
+Live URL: https://domain-qa-chatbot-730572317246.us-central1.run.app/
+
 ## Running Evaluation
 
 First, download the code repository. To run the model evaluation locally on Windows, run the following line of code in Command Prompt after replacing the placeholder values (be careful not to replace any quotation marks):
