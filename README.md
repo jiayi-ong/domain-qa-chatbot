@@ -9,7 +9,11 @@ uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" cmd /c "start /B python -m uvicor
 ```
 
 ```<FULL_PATH_TO_PROJECT_ROOT>```: The absolute path to the project root.
+
 ```<STARTUP_WAIT_SECONDS>```: The number of seconds to wait for app to start-up. Recommend 10 seconds.
+
 ```<HOST>```: e.g. ```127.0.0.1```
+
 ```<PORT>```: e.g. ```8000```
+
 ```<RELATIVE_PATH_TO_REPORT_FILE>```: The relative path (to root directory) to store evaluation reports.
