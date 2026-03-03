@@ -7,7 +7,6 @@ from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
-# Resolve paths relative to this file
 BASE_DIR = Path(__file__).parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 
