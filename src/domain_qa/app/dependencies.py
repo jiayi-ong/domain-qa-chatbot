@@ -1,3 +1,9 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (1) Scaffold Assistance
+# ChatGPT generated only structural elements
+# (e.g., file template, class definitions, function signatures, docstrings).
+
 from __future__ import annotations
 
 from functools import lru_cache

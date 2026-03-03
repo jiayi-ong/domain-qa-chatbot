@@ -1,3 +1,10 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (2) Guided Implementation
+# ChatGPT generated structural components and partial logic 
+# (core functions, method outlines, algorithm direction)
+# including TODO markers or incomplete sections requiring that were completed manually.
+
 from __future__ import annotations
 
 import json

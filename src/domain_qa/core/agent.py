@@ -1,3 +1,10 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (2) Guided Implementation
+# ChatGPT generated structural components and partial logic 
+# (core functions, method outlines, algorithm direction)
+# including TODO markers or incomplete sections requiring that were completed manually.
+
 from __future__ import annotations
 
 import time
@@ -70,13 +77,13 @@ class Agent:
         history.truncate_messages(self.max_context_messages)
         self.session_store.save(session_id, history)
 
-        # post-checks + fallback prompts
+        # post-checks: deterministic rules to trigger fallback prompts
         used_fallback = False
         tags: list[str] = []
-
         ctx = PostCheckContext(llm=self.llm, user_input=user_input)
 
         for check in self.postchecks:
+            # trigger as a function of both user input and answer text
             if check.trigger(answer_text=answer_text, user_input=user_input):
                 fallback_text = check.run_fallback(ctx)
                 answer_text = fallback_text.strip()

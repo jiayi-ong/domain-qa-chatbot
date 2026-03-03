@@ -1,20 +1,26 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (1) Scaffold Assistance
+# ChatGPT generated only structural elements
+# (e.g., file template, class definitions, function signatures, docstrings).
+
 from __future__ import annotations
 
 from domain_qa.core.postcheck.base import PostCheck
-from domain_qa.core.postcheck.regex_oos import RegexOutOfScopePostCheck
 from domain_qa.core.postcheck.safety_distress import SafetyDistressPostCheck
 
 
 def default_postchecks(enabled: bool = True) -> list[PostCheck]:
     if not enabled:
         return []
-    # Ordered list = priority (first match wins) in Agent.
+    
+    # Ordered list: sets post-check priority (first match wins)
     return [
-        SafetyDistressPostCheck(),
-        RegexOutOfScopePostCheck(),
+        SafetyDistressPostCheck()
     ]
 
 
 # TO-DO:
-# - config-driven enable/disable per check
-# - allow multiple triggers and choose best fallback deterministically
+# - add more post-checks
+# - enable/disable checks in config
+# - allow multiple triggers and choose best fallback

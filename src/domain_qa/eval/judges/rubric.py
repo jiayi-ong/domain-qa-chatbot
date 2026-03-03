@@ -1,3 +1,24 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (2) Guided Implementation
+# ChatGPT generated structural components and partial logic 
+# (core functions, method outlines, algorithm direction)
+# including TODO markers or incomplete sections requiring that were completed manually.
+
+# ChatGPT generated the initial drafts of the Rubric descriptions.
+# Prompt used:
+# """
+# I want 10 rubric items to evaluate the response of an LLM.
+# For each item, state the title, a description, and a weight.
+# I have these 10 titles in mind:
+# Factual and Logical Accuracy, Completeness, Relevance, Clarity and Structure,
+# Justification and Explanation, Uncertainty Handling, Safety and Ethical Considerations, 
+# Conciseness, Tone and Professionalism, Validity Checking.
+# Note that this rubric will be given to an LLM as a judge, 
+# so phrase the description with that in mind.
+# """
+# All rubric items were then manually reviewed.
+
 from __future__ import annotations
 
 import json

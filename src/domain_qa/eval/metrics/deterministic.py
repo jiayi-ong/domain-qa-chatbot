@@ -1,3 +1,9 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# Level of contribution: (1) Scaffold Assistance
+# ChatGPT generated only structural elements
+# (e.g., file template, class definitions, function signatures, docstrings).
+
 from __future__ import annotations
 
 import re
@@ -20,6 +26,7 @@ def jaccard(tokens_a: Sequence[str], tokens_b: Sequence[str]) -> float:
         return 1.0
     if not set_a or not set_b:
         return 0.0
+    
     return len(set_a & set_b) / len(set_a | set_b)
 
 
@@ -28,6 +35,7 @@ def ngrams(tokens: Sequence[str], n: int) -> list[tuple[str, ...]]:
         raise ValueError("n must be >= 1")
     if len(tokens) < n:
         return []
+    
     return [tuple(tokens[i : i + n]) for i in range(len(tokens) - n + 1)]
 
 
@@ -47,6 +55,7 @@ def rouge_n_f1(ref_tokens: Sequence[str], hyp_tokens: Sequence[str], n: int) -> 
     recall = overlap / max(1, sum(ref_counts.values()))
     if precision + recall == 0:
         return 0.0
+    
     return (2 * precision * recall) / (precision + recall)
 
 

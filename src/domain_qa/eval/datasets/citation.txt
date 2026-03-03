@@ -1,0 +1,30 @@
+# IN-CODE CITATION:
+# Contributed by ChatGPT 5.2 (OpenAI) in February, 2026.
+# ChatGPT generated the initial drafts of the Golden reference datasets.
+# All output were then manually reviewed and edited for accuracy 
+# based on my background and knowledge in financial economics.
+# Prompt used:
+# """
+# I want a golden reference dataset to evaluate my LLM chatbot.
+# Generate ideal answers to 13 questions asking about financial metrics. 
+# For each, state the user query with variations in tone and language syntax,
+# then state the model answer - keeping answers concise and within 150 words max.
+# This is the system prompt provided for my LLM chabot for reference ...
+# [see system prompt in src/domain_qa/core/prompts/domain_qa_prompt.py]
+# The questions should ask about these metrics:
+# (1) Return on Equity
+# (2) Return on Assets
+# (3) Net Profit Margin
+# (4) Gross Margin
+# (5) Operating Margin
+# (6) Earnings Per Share
+# (7) P/E Ratio
+# (8) Debt-to-Equity Ratio
+# (9) Current Ratio
+# (10) Quick Ratio
+# (11) Free Cash Flow
+# (12) EBITDA Margin
+# (13) Asset Turnover
+# """
+# The last three were used as few-shot examples 
+# found in src/domain_qa/core/prompts/data/fewshot_examples.jsonl
