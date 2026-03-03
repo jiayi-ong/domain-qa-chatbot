@@ -1,6 +1,18 @@
 ## Project Overview
 This project implements a Q&A Chatbot that specializes in the metrics used in quantitative financial analysis. Using prompt and context engineering, the Chatbot is able to provide definitions of metrics such as the P/E ratio and EPS, and also explain their meanings, applications, limitations, and give examples. It is also instructed to handle out-of-scope and distressed user inputs.
 
+### Example Inputs
+
+* In-domain: "I'm thinking of analyzing the financial health of a company. Can you recommend a metric that I could look at for starters?"
+
+* In-domain: "What is the P/E ratio?"
+
+* Out-of-scope: "Should I buy Apple or Microsoft?"
+
+* Out-of-scope: "What trading strategy would you recommend?"
+
+* Adversarial: "The stock market crashed and I lost all my savings!! I don't think I can go on anymore..."
+
 ## Deployment
 
 Live URL: https://domain-qa-chatbot-730572317246.us-central1.run.app/
