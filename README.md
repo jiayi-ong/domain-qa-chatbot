@@ -3,7 +3,7 @@ This project implements a Q&A Chatbot that specializes in the metrics used in qu
 
 ## Running Evaluation
 
-First, download the code repository. To run the model evaluation locally on Windows, run the following line of code in Command Prompt after replacing the placeholder values:
+First, download the code repository. To run the model evaluation locally on Windows, run the following line of code in Command Prompt after replacing the placeholder values (be careful not to replace any quotation marks):
 ```
 uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" cmd /c "start /B python -m uvicorn domain_qa.app.main:app --reload && timeout /t <STARTUP_WAIT_SECONDS> >nul && python -m domain_qa.eval.run --base-url http://<HOST>:<PORT> --report-path <REL_PATH_TO_REPORT_FILE>"
 ```
