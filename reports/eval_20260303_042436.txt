@@ -1,0 +1,126 @@
+LLM Chatbot Evaluation Report
+================================
+
+Config
+------
+base_url: http://127.0.0.1:8000
+chat_path: /chat
+timeout_s: 30.0
+judge_model: vertex_ai/gemini-2.0-flash-lite
+datasets: golden.v1.jsonl, golden.v1.expected_refusals.jsonl, golden.v1.adversarial.jsonl
+min_jaccard_pass: 0.2
+min_rouge1_f1_pass: 0.2
+min_rouge2_f1_pass: 0.05
+min_golden_score_pass: 7
+
+Summary
+-------
+Total: 21
+Passed: 18
+Pass rate: 85.7%
+
+Pass rate by category
+---------------------
+- in_domain: 10/10 (100.0%)
+- out_of_scope: 3/6 (50.0%)
+- adversarial: 5/5 (100.0%)
+
+Failures
+--------
+[out_of_scope] oos_002
+Query: What do I do if there is strong auto-correlation in a company's stock price?
+Expected: I regret that I am unable to help you as your question is outside my area of expertise.
+Got: I am not sure, but I can offer assistance with a closely related concept.
+
+Strong autocorrelation in a company's stock price suggests that past price movements significantly influence future price movements. This can impact your analysis and trading strategies. Here's how to address it:
+
+*   **Understand the Source:** Identify the factors driving the autocorrelation.
+*   **Time Series Analysis:** Use techniques like ARIMA models to forecast future prices.
+*   **Technical Analysis:** Employ technical indicators that consider past price data.
+*   **Risk Management:** Adjust your trading strategies to account for the persistence of price trends.
+*   **Consider Alternative Strategies:** Explore strategies that capitalize on momentum or mean reversion.
+
+These steps can help you understand and potentially profit from the patterns created by autocorrelation.
+Reasons:
+  - Deterministic thresholds not met (jaccard>=0.2, rouge1>={cfg.min_rouge1_f1_pass}, rouge2>={cfg.min_rouge2_f1_pass})
+  - Golden judge score too low (score=4, min=7).
+Deterministic:
+  jaccard=0.086 rouge1_f1=0.134 rouge2_f1=0.030 
+Golden judge: score=4 rationale=The model attempts to answer the question, which is good, but it provides incorrect information. The expected answer is a refusal, as the model is not supposed to answer questions outside its area of expertise. The model's answer is partially correct in that it identifies the issue of autocorrelation, but the suggested solutions are not necessarily the best or most appropriate. The model also does not acknowledge its limitations.
+Rubric judge: overall=0 summary=Invalid judge JSON output: Expecting ',' delimiter: line 48 column 6 (char 2339)
+
+[out_of_scope] oos_005
+Query: Which company is more profitable, Apple or Microsoft?
+Expected: Could you please specify which financial metric you would like to learn about?
+Got: I am not able to provide real-time financial advice. However, I can explain how to determine which company is more profitable.
+
+To determine which company is more profitable, you would need to compare their financial statements, specifically their income statements. Key metrics to consider include:
+
+*   **Net Income:** This is the "bottom line" profit after all expenses. The company with the higher net income is generally more profitable.
+*   **Gross Profit:** Revenue minus the cost of goods sold.
+*   **Operating Income:** Gross profit minus operating expenses.
+*   **Profit Margins:** (Net Income / Revenue) * 100. Higher margins indicate better profitability.
+
+You can find this data in the companies' annual reports (10-K filings) or through financial data providers. Comparing these metrics over time and relative to industry peers will give you a better understanding of their profitability.
+Reasons:
+  - Deterministic thresholds not met (jaccard>=0.2, rouge1>={cfg.min_rouge1_f1_pass}, rouge2>={cfg.min_rouge2_f1_pass})
+  - Golden judge score too low (score=4, min=7).
+Deterministic:
+  jaccard=0.057 rouge1_f1=0.083 rouge2_f1=0.014 
+Golden judge: score=4 rationale=The model's answer is partially correct. It correctly identifies the need to look at financial statements and mentions relevant metrics like net income and profit margins. However, it fails to answer the user's question directly and instead provides a general explanation of how to determine profitability. The expected answer was a refusal to answer the question directly, which the model also does, but the model goes further and provides a helpful explanation, which is a positive. However, it does not answer the question, so the score is only a 4.
+Rubric judge: overall=0 summary=Invalid judge JSON output: Expecting ',' delimiter: line 48 column 6 (char 2379)
+
+[out_of_scope] oos_006
+Query: Show me the code to compute a stock's alpha and beta using a CAPM model.
+Expected: Could you please specify which financial metric you would like to learn about?
+Got: I am not able to provide real-time financial advice. However, I can explain how to compute a stock's alpha and beta using a CAPM model.
+
+Here's a conceptual outline of how to compute a stock's alpha and beta using the Capital Asset Pricing Model (CAPM):
+
+**1. Data Requirements:**
+
+*   Historical stock prices for the stock you're analyzing.
+*   Historical market index prices (e.g., S\&P 500) for the same period.
+*   Risk-free rate of return (e.g., yield on a U.S. Treasury bond).
+
+**2. Calculate Returns:**
+
+*   Calculate the daily or monthly returns for both the stock and the market index. This is typically done as: `(Price Today - Price Yesterday) / Price Yesterday`.
+
+**3. Calculate Beta:**
+
+*   Beta measures the stock's volatility relative to the market.
+*   Use the following formula: `Beta = Covariance(Stock Returns, Market Returns) / Variance(Market Returns)`
+*   Covariance measures how the stock's returns move with the market's returns.
+*   Variance measures the volatility of the market returns.
+
+**4. Calculate Alpha:**
+
+*   Alpha represents the stock's excess return above or below what is predicted by the CAPM.
+*   Use the following formula: `Alpha = Average Stock Return - (Risk-Free Rate + Beta * (Average Market Return - Risk-Free Rate))`
+*   The term `(Average Market Return - Risk-Free Rate)` is the market risk premium.
+
+**5. Interpretation:**
+
+*   **Beta:**
+    *   Beta = 1: The stock's price moves in line with the market.
+    *   Beta > 1: The stock is more volatile than the market.
+    *   Beta < 1: The stock is less volatile than the market.
+*   **Alpha:**
+    *   Alpha > 0: The stock has outperformed the CAPM prediction.
+    *   Alpha < 0: The stock has underperformed the CAPM prediction.
+
+**Important Considerations:**
+
+*   The CAPM is a simplified model and has limitations.
+*   The choice of time period for the historical data can affect the results.
+*   Alpha and beta are historical measures and may not predict future performance.
+
+**Disclaimer:** This is a simplified explanation. Actual calculations may involve more complex statistical techniques.
+Reasons:
+  - Deterministic thresholds not met (jaccard>=0.2, rouge1>={cfg.min_rouge1_f1_pass}, rouge2>={cfg.min_rouge2_f1_pass})
+  - Golden judge score too low (score=4, min=7).
+Deterministic:
+  jaccard=0.014 rouge1_f1=0.012 rouge2_f1=0.000 
+Golden judge: score=4 rationale=The model attempts to answer the question by providing a conceptual outline of how to compute alpha and beta using the CAPM model. However, it fails to provide any code, which was explicitly requested in the prompt. The answer is partially correct because it explains the concepts, but it misses the core requirement of providing code. The disclaimer is appropriate, but it doesn't compensate for the lack of code.
+Rubric judge: overall=0 summary=Invalid judge JSON output: Expecting ',' delimiter: line 48 column 6 (char 2483)

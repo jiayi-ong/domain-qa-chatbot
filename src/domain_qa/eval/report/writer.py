@@ -66,7 +66,7 @@ def render_text_report(report: EvalReport) -> str:
 
 
 def with_timestamp(path: Path) -> Path:
-    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%S%M")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     return path.with_name(f"{path.stem}_{timestamp}{path.suffix}")
 
 
