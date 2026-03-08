@@ -39,3 +39,14 @@ Alternatively, in bash:
 ```bash
 uv run --project "<FULL_PATH_TO_PROJECT_ROOT>" python "<FULL_PATH_TO_PROJECT_ROOT>\run_eval.py"
 ```
+
+## Running App Locally
+
+In the Command Prompt:
+```
+cd <FULL_PATH_TO_PROJECT_ROOT>
+
+uv run uvicorn domain_qa.app.main:app --reload
+```
+
+Then, enter ```http://127.0.0.1:8000/``` in your web browser.
